@@ -9,4 +9,6 @@ if __name__ == '__main__':
         '_agentgirl_'
     )
     m.getDonorsFollowers()
+    #m.run()
+    print(m.donorsFollowers)
     m.run()

@@ -26,10 +26,24 @@ class MassFollow:
             for donor in self.donors.keys():
                 self.API.getUserFollowers(donor,next)
                 followers = []
-                self.donors[donor] = self.API.LastJson['next_max_id']
-                for follower in self.API.LastJson['users']:
-                    followers.append(follower['username'])
-                self.donorsFollowers[donor] = followers
+                #######
+                #You must fix a bug
+                #
+                #
+                #
+                #
+                #
+                try:
+                    self.donors[donor] = self.API.LastJson['next_max_id']
+                except KeyError:
+                    print(donor)
+                    self.donors[donor] = ''
+                try:
+                    for follower in self.API.LastJson['users']:
+                        followers.append(follower['username'])
+                    self.donorsFollowers[donor] = followers
+                except KeyError:
+                    self.donorsFollowers[donor] = followers
         else:
             print("Error! You must set donors (MassFollow.setDonors(*args))!")
 
@@ -41,13 +55,18 @@ class MassFollow:
             while len(self.donors)>0:
                 for donor in self.donors.keys():
                     for follower in self.donorsFollowers[donor]:
-                        self.follow(follower)
+                        #self.follow(follower)
                         print("You are follow {}".format(follower))
-                        sleep(15)
+                        f = open("subs.txt",'a')
+                        f.write(follower + "\n")
+                        f.close()
                     if self.donors[donor] != '':
                         self.getDonorsFollowers(self.donors[donor])
                     else:
                         self.donors.pop(donor)
+                        self.donorsFollowers.pop(donor)
+            print(self.donors)
+            print('finish')
 
         else:
             print("Error! You must add donors followers (MassFollow.getDonorsFollowers())!")
