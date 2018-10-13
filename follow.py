@@ -26,13 +26,6 @@ class MassFollow:
             for donor in self.donors.keys():
                 self.API.getUserFollowers(donor,next)
                 followers = []
-                #######
-                #You must fix a bug
-                #
-                #
-                #
-                #
-                #
                 try:
                     self.donors[donor] = self.API.LastJson['next_max_id']
                 except KeyError:
@@ -40,31 +33,25 @@ class MassFollow:
                     self.donors[donor] = ''
                 try:
                     for follower in self.API.LastJson['users']:
-                        followers.append(follower['username'])
+                        followers.append(follower['pk'])
                     self.donorsFollowers[donor] = followers
                 except KeyError:
                     self.donorsFollowers[donor] = followers
         else:
             print("Error! You must set donors (MassFollow.setDonors(*args))!")
 
-    def follow(self,username):
-        self.API.follow(Parser(username).getUserId())
-
     def run(self):
         if len(self.donorsFollowers)>0:
             while len(self.donors)>0:
                 for donor in self.donors.keys():
                     for follower in self.donorsFollowers[donor]:
-                        #self.follow(follower)
+                        self.API.follow(follower)
                         print("You are follow {}".format(follower))
-                        f = open("subs.txt",'a')
-                        f.write(follower + "\n")
-                        f.close()
-                    if self.donors[donor] != '':
-                        self.getDonorsFollowers(self.donors[donor])
-                    else:
-                        self.donors.pop(donor)
-                        self.donorsFollowers.pop(donor)
+                if self.donors[donor] != '':
+                    self.getDonorsFollowers(self.donors[donor])
+                else:
+                    self.donors.pop(donor)
+                    self.donorsFollowers.pop(donor)
             print(self.donors)
             print('finish')
 
