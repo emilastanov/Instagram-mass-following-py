@@ -54,6 +54,12 @@ class MassFollow:
                     self.donorsFollowers.pop(donor)
             print(self.donors)
             print('finish')
-
+            self.API.getSelfUsernameInfo()
+            f = open('log.html','a')
+            f.write(
+                "<h4 style='margin: 0'>Bot finished task!</h4>"
+                "<p style='margin: 0'><b>{0}</b> have <b>{1}</b> folowers</p><hr>".format(self.API.LastJson['user']['username'],self.API.LastJson['user']['follower_count'])
+            )
+            f.close()
         else:
             print("Error! You must add donors followers (MassFollow.getDonorsFollowers())!")
