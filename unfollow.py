@@ -16,10 +16,17 @@ class UnFollow:
         return self.followers
 
     def run(self):
+        count = 0
         for follower in self.followers:
-            self.API.unfollow(follower)
+            #self.API.unfollow(follower)
             print('{} was unfollowed'.format(follower))
-            sleep(5)
-        self.getFollowers()
-        if len(self.followers)>0:
-            self.run()
+            #sleep(60)
+            f = open('test.txt','a')
+            f.write(str(follower)+'\n')
+            f.close()
+            count += 1
+            if count > 999:
+                break
+        #self.getFollowers()
+        #if len(self.followers)>0:
+            #self.run()

@@ -21,7 +21,7 @@ class MassFollow:
                 print("Bad username {}".format(donor))
         print("Donors has been setted: {}".format(self.donors))
 
-    def getDonorsFollowers(self, next=''):
+    def getDonorsFollowers_all(self, next=''):
         if len(self.donors)>0:
             for donor in self.donors.keys():
                 self.API.getUserFollowers(donor,next)
@@ -40,26 +40,30 @@ class MassFollow:
         else:
             print("Error! You must set donors (MassFollow.setDonors(*args))!")
 
+    def getDonorsFollowers(self):
+        if len(self.donors) > 0:
+            for donor in self.donors.keys():
+                self.API.getUserFollowers(donor)
+                followers = []
+                for follower in self.API.LastJson['users']:
+                    followers.append(follower['pk'])
+                self.donorsFollowers[donor] = followers
+        else:
+            print("Error! You must set donors (MassFollow.setDonors(*args))!")
+
     def run(self):
         if len(self.donorsFollowers)>0:
-            while len(self.donors)>0:
-                for donor in self.donors.keys():
-                    for follower in self.donorsFollowers[donor]:
-                        self.API.follow(follower)
-                        print("You are follow {}".format(follower))
-                if self.donors[donor] != '':
-                    self.getDonorsFollowers(self.donors[donor])
-                else:
-                    self.donors.pop(donor)
-                    self.donorsFollowers.pop(donor)
-            print(self.donors)
-            print('finish')
-            self.API.getSelfUsernameInfo()
-            f = open('log.html','a')
-            f.write(
-                "<h4 style='margin: 0'>Bot finished task!</h4>"
-                "<p style='margin: 0'><b>{0}</b> have <b>{1}</b> folowers</p><hr>".format(self.API.LastJson['user']['username'],self.API.LastJson['user']['follower_count'])
-            )
-            f.close()
+            for donor in self.donors.keys():
+                for follower in self.donorsFollowers[donor]:
+                    self.API.follow(follower)
+                    print("You are follow {}".format(follower))
+                    sleep(60)
+                #Get 200 followers yet from one account
+                #if self.donors[donor] != '':
+                    #self.getDonorsFollowers(self.donors[donor])
+                #else:
+                    #self.donors.pop(donor)
+                    #self.donorsFollowers.pop(donor)
         else:
             print("Error! You must add donors followers (MassFollow.getDonorsFollowers())!")
+
