@@ -12,6 +12,7 @@ while True:
         'tnt_online',
         'pavelvolyaofficial'
     )
+    m.getDonorsFollowers()
     m.run()
 
     print(
@@ -34,6 +35,7 @@ while True:
 
     #Unfollowing
     u = UnFollow(settings.USERNAME,settings.PASSWORD)
+    u.getFollowers()
     u.run()
     print(
         "Unfollowing action has been finished!\n"
