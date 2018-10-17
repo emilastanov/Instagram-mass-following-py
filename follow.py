@@ -5,11 +5,13 @@ from time import sleep
 
 
 class MassFollow:
-    def __init__(self,username,password):
+    def __init__(self,username,password,delay,count):
         self.API = InstagramAPI(username,password)
         self.API.login()
         self.donors = {}
         self.donorsFollowers = {}
+        self.delay = delay
+        self.count = count
 
     def setDonors(self,*args):
         for donor in args:
@@ -53,11 +55,15 @@ class MassFollow:
 
     def run(self):
         if len(self.donorsFollowers)>0:
+            count = 0
             for donor in self.donors.keys():
                 for follower in self.donorsFollowers[donor]:
                     self.API.follow(follower)
                     print("You are follow {}".format(follower))
-                    sleep(60)
+                    sleep(self.delay)
+                    count+=1
+                    if count > self.count:
+                        break
                 #Get 200 followers yet from one account
                 #if self.donors[donor] != '':
                     #self.getDonorsFollowers(self.donors[donor])
@@ -66,4 +72,3 @@ class MassFollow:
                     #self.donorsFollowers.pop(donor)
         else:
             print("Error! You must add donors followers (MassFollow.getDonorsFollowers())!")
-

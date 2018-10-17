@@ -3,10 +3,12 @@ from time import sleep
 
 
 class UnFollow:
-    def __init__(self, username, password):
+    def __init__(self, username, password,delay,count):
         self.API = InstagramAPI(username, password)
         self.API.login()
         self.followers = []
+        self.delay = delay
+        self.count = count
 
     def getFollowers(self):
         self.followers = []
@@ -20,12 +22,12 @@ class UnFollow:
         for follower in self.followers:
             #self.API.unfollow(follower)
             print('{} was unfollowed'.format(follower))
-            #sleep(60)
+            sleep(self.delay)
             f = open('test.txt','a')
             f.write(str(follower)+'\n')
             f.close()
             count += 1
-            if count > 999:
+            if count > self.count:
                 break
         #self.getFollowers()
         #if len(self.followers)>0:
